@@ -1,0 +1,69 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id        String    @id @default(cuid())
+  firstName String
+  lastName  String?
+  email     String?
+  password  String
+  phone     String
+  address   String
+  state     States    @relation(fields: [stateId], references: [id])
+  stateId   String
+  city      Cities    @relation(fields: [cityId], references: [id])
+  cityId    String
+  pincode   String
+  role      Roles
+  active    Boolean   @default(false)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Countries {
+  id     String   @id @default(cuid())
+  name   String
+  states States[]
+}
+
+model States {
+  id        String    @id @default(cuid())
+  name      String
+  countries Countries @relation(fields: [countryId], references: [id])
+  countryId String
+  cities    Cities[]
+  users     Users[]
+}
+
+model Cities {
+  id        String      @id @default(cuid())
+  name      String
+  states    States      @relation(fields: [stateId], references: [id])
+  stateId   String
+  locations Locations[]
+  users     Users[]
+}
+
+model Locations {
+  id     String @id @default(cuid())
+  name   String
+  cities Cities @relation(fields: [cityId], references: [id])
+  cityId String
+}
+
+enum Roles {
+  ADMIN
+  USER
+}
