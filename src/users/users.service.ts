@@ -2,8 +2,7 @@ import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { Roles } from "@prisma/client";
 import { PrismaService } from "src/prisma.service";
 import { CreateUserDto } from "src/validations/userValidation/createUser.dto";
-
-const md5 = require('md5');
+import { Md5 } from "ts-md5";
 
 @Injectable()
 export class UsersService {
@@ -56,7 +55,7 @@ export class UsersService {
                 firstName: data?.firstName,
                 lastName: data?.lastName,
                 email: data?.email.trim(),
-                password: md5(data?.password?.trim()),
+                password: Md5.hashStr(data?.password?.trim()),
                 phone: data?.phone,
                 address: data?.address,
                 cityId: getCity.id,
