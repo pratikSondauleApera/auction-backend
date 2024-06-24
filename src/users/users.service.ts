@@ -51,11 +51,13 @@ export class UsersService {
 
         try {
 
+            const hashedPassword = Md5.hashStr(data?.password?.trim())
+
             const userData = {
                 firstName: data?.firstName,
                 lastName: data?.lastName,
                 email: data?.email.trim(),
-                password: Md5.hashStr(data?.password?.trim()),
+                password: hashedPassword,
                 phone: data?.phone,
                 address: data?.address,
                 cityId: getCity.id,
