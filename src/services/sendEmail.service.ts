@@ -10,6 +10,7 @@ export class SendgridService {
         if (!apiKey) {
             throw new HttpException('Api key not found', HttpStatus.NOT_FOUND)
         }
+
         SendGrid.setApiKey(apiKey);
     }
 
