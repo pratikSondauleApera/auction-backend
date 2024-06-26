@@ -1,17 +1,25 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { Roles } from "@prisma/client";
 import { PrismaService } from "src/prisma.service";
+import { SendgridService } from "src/services/sendEmail.service";
 import { CreateUserDto } from "src/validations/userValidation/createUser.dto";
+import { SendOtpToEmail } from "src/validations/userValidation/sendOtpToEmail.dto";
+import { VerifyEmailDto } from "src/validations/userValidation/verifyEmail.dto";
 import { Md5 } from "ts-md5";
 
 @Injectable()
 export class UsersService {
 
     constructor(
-        private prisma: PrismaService
+        private prisma: PrismaService,
+        private readonly sendgridService: SendgridService
     ) { }
 
     async createUser(data: CreateUserDto) {
+
+        if (data?.role === 'ADMIN') {
+            throw new HttpException("You don't have permission to create users", HttpStatus.BAD_REQUEST)
+        }
 
         const getCity = await this.prisma.cities.findUnique({
             where: {
@@ -82,4 +90,108 @@ export class UsersService {
             throw new HttpException('Something went wrong while creating user', HttpStatus.FORBIDDEN)
         }
     }
+
+    async generateOtp(limit: number) {
+        var digits = '0123456789';
+        let otp = '';
+        for (let i = 0; i < limit; i++) {
+            otp += digits[Math.floor(Math.random() * 10)];
+        }
+        return otp;
+    }
+
+    async sendOtpToEmail(data: SendOtpToEmail) {
+
+        const otp = await this.generateOtp(4)
+
+        const mail = {
+            to: data?.email,
+            subject: 'Email Verification',
+            from: {
+                email: 'pratik@aperasoftwares.com',
+                name: 'Auction'
+            },
+            html: `<p>Here is your OTP <b>${otp}</b> for email verification</p>`
+        };
+
+        const user = await this.prisma.users.update({
+            where: {
+                email: data?.email
+            },
+            data: {
+                otp: otp,
+                otpCreatedAt: new Date()
+            }
+        })
+
+        try {
+            const sendOtpToEmail = await this.sendgridService.send(mail);
+
+            return {
+                status: true,
+                statusCode: HttpStatus.OK,
+                sentEmail: sendOtpToEmail,
+                msg: "OTP sent to your email successfully"
+            }
+        } catch (error) {
+            console.error(error);
+            throw new HttpException('Something went wrong while sending email', HttpStatus.FORBIDDEN);
+        }
+    }
+
+    async verifyEmail(data: VerifyEmailDto) {
+
+        const user = await this.prisma.users.findUnique({
+            where: {
+                email: data?.email,
+                verified: false
+            }
+        })
+
+        if (!user) {
+            throw new HttpException('User not found', HttpStatus.NOT_FOUND)
+        }
+
+        const otpCreatedAt = new Date(user?.otpCreatedAt).getTime()
+
+        const validityDuration = 10 * 60 * 1000
+
+        const expireOtpInTime = otpCreatedAt + validityDuration
+
+        const currentTime = new Date().getTime()
+
+        if (currentTime > expireOtpInTime) {
+            return {
+                status: false,
+                msg: 'Your OTP has expired'
+            }
+        }
+
+        if (user?.otp === data?.otp) {
+
+            try {
+
+                const verifyUser = await this.prisma.users.update({
+                    where: {
+                        email: user?.email
+                    },
+                    data: {
+                        verified: true
+                    }
+                })
+
+                return {
+                    status: true,
+                    statusCode: HttpStatus.OK,
+                    verifiedUser: verifyUser,
+                    msg: "Email verified successfully"
+                }
+            } catch (error) {
+                console.log(error)
+                throw new HttpException('Something went wrong while verifying user email', HttpStatus.FORBIDDEN)
+            }
+        }
+
+    }
+
 }
