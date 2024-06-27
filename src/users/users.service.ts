@@ -71,7 +71,6 @@ export class UsersService {
                 cityId: getCity.id,
                 stateId: getState.id,
                 pincode: data?.pincode,
-                active: true,
                 role: Roles.USER
             }
 
@@ -182,7 +181,8 @@ export class UsersService {
                         email: user?.email
                     },
                     data: {
-                        verified: true
+                        verified: true,
+                        active: true
                     }
                 })
 
