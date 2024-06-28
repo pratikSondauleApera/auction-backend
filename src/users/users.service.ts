@@ -200,4 +200,178 @@ export class UsersService {
 
     }
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    async getCountries() {
+        try {
+            const getAllCountries = await this.prisma.countries.findMany({})
+
+            return {
+                status: true,
+                statusCode: HttpStatus.OK,
+                countries: getAllCountries,
+                msg: "Fetched countries successfully"
+            }
+
+        } catch (error) {
+            console.log(error)
+            throw new HttpException("Something went wrong while fetching countries", HttpStatus.FORBIDDEN)
+        }
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    async getStatesByCountry(countryId: string) {
+
+        const country = await this.prisma.countries.findUnique({
+            where: {
+                id: countryId
+            }
+        })
+
+        if (!country) {
+            throw new HttpException('Country not found', HttpStatus.NOT_FOUND)
+        }
+
+        try {
+            const getStates = await this.prisma.states.findMany({
+                where: {
+                    countryId: country.id
+                }
+            })
+
+            return {
+                status: true,
+                statusCode: HttpStatus.OK,
+                states: getStates,
+                msg: "Fetched states successfully"
+            }
+        } catch (error) {
+            console.log(error)
+            throw new HttpException("Something went wrong while fetching states", HttpStatus.FORBIDDEN)
+        }
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    async getAllStates() {
+        try {
+            const getAllStates = await this.prisma.states.findMany({})
+
+            return {
+                status: true,
+                statusCode: HttpStatus.OK,
+                states: getAllStates,
+                msg: "Fetched states successfully"
+            }
+
+        } catch (error) {
+            console.log(error)
+            throw new HttpException("Something went wrong while fetching states", HttpStatus.FORBIDDEN)
+        }
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    async getCitiesByState(stateId: string) {
+
+        const state = await this.prisma.states.findUnique({
+            where: {
+                id: stateId
+            }
+        })
+
+        if (!state) {
+            throw new HttpException('State not found', HttpStatus.NOT_FOUND)
+        }
+
+        try {
+            const getCities = await this.prisma.cities.findMany({
+                where: {
+                    stateId: state.id
+                }
+            })
+
+            return {
+                status: true,
+                statusCode: HttpStatus.OK,
+                cities: getCities,
+                msg: "Fetched cities successfully"
+            }
+        } catch (error) {
+            console.log(error)
+            throw new HttpException("Something went wrong while fetching cities", HttpStatus.FORBIDDEN)
+        }
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    async getAllCities() {
+        try {
+            const getAllCities = await this.prisma.cities.findMany({})
+
+            return {
+                status: true,
+                statusCode: HttpStatus.OK,
+                cities: getAllCities,
+                msg: "Fetched cities successfully"
+            }
+
+        } catch (error) {
+            console.log(error)
+            throw new HttpException("Something went wrong while fetching cities", HttpStatus.FORBIDDEN)
+        }
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    async getLocationByCity(cityId: string) {
+
+        const city = await this.prisma.cities.findUnique({
+            where: {
+                id: cityId
+            }
+        })
+
+        if (!city) {
+            throw new HttpException('City not found', HttpStatus.NOT_FOUND)
+        }
+
+        try {
+            const getLocations = await this.prisma.locations.findMany({
+                where: {
+                    cityId: city.id
+                }
+            })
+
+            return {
+                status: true,
+                statusCode: HttpStatus.OK,
+                locations: getLocations,
+                msg: "Fetched locations successfully"
+            }
+        } catch (error) {
+            console.log(error)
+            throw new HttpException("Something went wrong while fetching locations", HttpStatus.FORBIDDEN)
+        }
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    async getAllLocations() {
+        try {
+            const getAllLocations = await this.prisma.locations.findMany({})
+
+            return {
+                status: true,
+                statusCode: HttpStatus.OK,
+                locations: getAllLocations,
+                msg: "Fetched locations successfully"
+            }
+
+        } catch (error) {
+            console.log(error)
+            throw new HttpException("Something went wrong while fetching locations", HttpStatus.FORBIDDEN)
+        }
+    }
 }
