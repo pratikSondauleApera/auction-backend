@@ -6,7 +6,7 @@ import { SendOtpToEmail } from "src/validations/userValidation/sendOtpToEmail.dt
 import { VerifyEmailDto } from "src/validations/userValidation/verifyEmail.dto";
 
 @ApiTags('Users')
-@Controller('users')
+@Controller('user')
 export class UsersController {
 
     constructor(private usersService: UsersService) { }

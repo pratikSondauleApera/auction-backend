@@ -14,25 +14,56 @@ datasource db {
 }
 
 model Users {
-  id           String    @id @default(cuid())
+  id           String     @id @default(cuid())
   firstName    String
   lastName     String?
-  email        String    @unique
+  email        String     @unique
   password     String
   phone        String
   address      String
-  state        States    @relation(fields: [stateId], references: [id])
+  state        States     @relation(fields: [stateId], references: [id])
   stateId      String
-  city         Cities    @relation(fields: [cityId], references: [id])
+  city         Cities     @relation(fields: [cityId], references: [id])
   cityId       String
   pincode      String
   role         Roles
-  active       Boolean   @default(false)
-  verified     Boolean   @default(false)
+  active       Boolean    @default(false)
+  verified     Boolean    @default(false)
   otp          String?
   otpCreatedAt DateTime?
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime? @updatedAt
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime?  @updatedAt
+  auctions     Auctions[]
+}
+
+model Auctions {
+  id                  String     @id @default(cuid())
+  loanAccountNumber   String
+  state               States     @relation(fields: [stateId], references: [id])
+  stateId             String
+  city                Cities     @relation(fields: [cityId], references: [id])
+  cityId              String
+  location            Locations  @relation(fields: [locationId], references: [id])
+  locationId          String
+  startDate           String
+  endDate             String
+  reservePrice        String
+  emd                 String
+  applicationDeadLine String
+  assetType           AssetTypes @relation(fields: [assetTypeId], references: [id])
+  assetTypeId         String
+  institutionBank     String
+  attachments         String
+  user                Users      @relation(fields: [userId], references: [id])
+  userId              String
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime?  @updatedAt
+}
+
+model AssetTypes {
+  id       String     @id @default(cuid())
+  name     String
+  auctions Auctions[]
 }
 
 model Countries {
@@ -42,12 +73,13 @@ model Countries {
 }
 
 model States {
-  id        String    @id @default(cuid())
+  id        String     @id @default(cuid())
   name      String
-  countries Countries @relation(fields: [countryId], references: [id])
+  countries Countries  @relation(fields: [countryId], references: [id])
   countryId String
   cities    Cities[]
   users     Users[]
+  auctions  Auctions[]
 }
 
 model Cities {
@@ -57,16 +89,19 @@ model Cities {
   stateId   String
   locations Locations[]
   users     Users[]
+  auctions  Auctions[]
 }
 
 model Locations {
-  id     String @id @default(cuid())
-  name   String
-  cities Cities @relation(fields: [cityId], references: [id])
-  cityId String
+  id       String     @id @default(cuid())
+  name     String
+  cities   Cities     @relation(fields: [cityId], references: [id])
+  cityId   String
+  auctions Auctions[]
 }
 
 enum Roles {
   ADMIN
+  DE
   USER
 }

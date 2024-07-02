@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { Roles } from "@prisma/client";
-import { PrismaService } from "src/prisma.service";
+import { PrismaService } from "src/services/prisma.service";
 import { SendgridService } from "src/services/sendEmail.service";
 import { CreateUserDto } from "src/validations/userValidation/createUser.dto";
 import { SendOtpToEmail } from "src/validations/userValidation/sendOtpToEmail.dto";
@@ -16,10 +16,6 @@ export class UsersService {
     ) { }
 
     async createUser(data: CreateUserDto) {
-
-        if (data?.role === 'ADMIN') {
-            throw new HttpException("You don't have permission to create users", HttpStatus.BAD_REQUEST)
-        }
 
         const getCity = await this.prisma.cities.findUnique({
             where: {
