@@ -38,7 +38,7 @@ model Users {
 
 model Auctions {
   id                  String     @id @default(cuid())
-  loanAccountNumber   String
+  loanAccountNumber   String     @unique
   state               States     @relation(fields: [stateId], references: [id])
   stateId             String
   city                Cities     @relation(fields: [cityId], references: [id])

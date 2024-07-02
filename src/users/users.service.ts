@@ -23,14 +23,18 @@ export class UsersService {
             }
         })
 
+        if (!getCity) {
+            throw new HttpException('City not found', HttpStatus.NOT_FOUND)
+        }
+
         const getState = await this.prisma.states.findUnique({
             where: {
                 id: data?.stateId
             }
         })
 
-        if (!getCity || !getState) {
-            throw new HttpException('Something went wrong while fetching city or state', HttpStatus.NOT_FOUND)
+        if (!getState) {
+            throw new HttpException('State not found', HttpStatus.NOT_FOUND)
         }
 
         const existingUserWithEmail = await this.prisma.users.findFirst({
@@ -82,7 +86,7 @@ export class UsersService {
             }
         } catch (error) {
             console.log(error)
-            throw new HttpException('Something went wrong while creating user', HttpStatus.FORBIDDEN)
+            throw new HttpException('Something went wrong while creating user', HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
 
@@ -134,7 +138,7 @@ export class UsersService {
             }
         } catch (error) {
             console.error(error);
-            throw new HttpException('Something went wrong while sending email', HttpStatus.FORBIDDEN);
+            throw new HttpException('Something went wrong while sending email', HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -190,7 +194,7 @@ export class UsersService {
                 }
             } catch (error) {
                 console.log(error)
-                throw new HttpException('Something went wrong while verifying user email', HttpStatus.FORBIDDEN)
+                throw new HttpException('Something went wrong while verifying user email', HttpStatus.INTERNAL_SERVER_ERROR)
             }
         }
 
@@ -211,7 +215,7 @@ export class UsersService {
 
         } catch (error) {
             console.log(error)
-            throw new HttpException("Something went wrong while fetching countries", HttpStatus.FORBIDDEN)
+            throw new HttpException("Something went wrong while fetching countries", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
 
@@ -244,7 +248,7 @@ export class UsersService {
             }
         } catch (error) {
             console.log(error)
-            throw new HttpException("Something went wrong while fetching states", HttpStatus.FORBIDDEN)
+            throw new HttpException("Something went wrong while fetching states", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
 
@@ -263,7 +267,7 @@ export class UsersService {
 
         } catch (error) {
             console.log(error)
-            throw new HttpException("Something went wrong while fetching states", HttpStatus.FORBIDDEN)
+            throw new HttpException("Something went wrong while fetching states", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
 
@@ -296,7 +300,7 @@ export class UsersService {
             }
         } catch (error) {
             console.log(error)
-            throw new HttpException("Something went wrong while fetching cities", HttpStatus.FORBIDDEN)
+            throw new HttpException("Something went wrong while fetching cities", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
 
@@ -315,7 +319,7 @@ export class UsersService {
 
         } catch (error) {
             console.log(error)
-            throw new HttpException("Something went wrong while fetching cities", HttpStatus.FORBIDDEN)
+            throw new HttpException("Something went wrong while fetching cities", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
 
@@ -348,7 +352,7 @@ export class UsersService {
             }
         } catch (error) {
             console.log(error)
-            throw new HttpException("Something went wrong while fetching locations", HttpStatus.FORBIDDEN)
+            throw new HttpException("Something went wrong while fetching locations", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
 
@@ -367,7 +371,7 @@ export class UsersService {
 
         } catch (error) {
             console.log(error)
-            throw new HttpException("Something went wrong while fetching locations", HttpStatus.FORBIDDEN)
+            throw new HttpException("Something went wrong while fetching locations", HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
 }
