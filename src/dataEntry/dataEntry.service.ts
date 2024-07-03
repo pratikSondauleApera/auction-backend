@@ -5,7 +5,7 @@ import { CreateDataEntryUserDto } from "src/validations/adminValidation/createDa
 import { Md5 } from "ts-md5";
 
 @Injectable()
-export class AdminService {
+export class DataEntryService {
 
     constructor(
         private prisma: PrismaService

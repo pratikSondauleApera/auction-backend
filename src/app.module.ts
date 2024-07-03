@@ -11,9 +11,9 @@ import { UsersService } from './users/users.service';
 import { AuthModule } from './auth/auth.module';
 import { AuthContoller } from './auth/auth.controller';
 import { AuthService } from './auth/auth.service';
-import { AdminModule } from './admin/admin.module';
-import { AdminController } from './admin/admin.controller';
-import { AdminService } from './admin/admin.service';
+import { DataEntryModule } from './dataEntry/dataEntry.module';
+import { DataEntryController } from './dataEntry/dataEntry.controller';
+import { DataEntryService } from './dataEntry/dataEntry.service';
 import { AuctionsModule } from './auctions/auctions.module';
 import { AuctionsController } from './auctions/auctions.controller';
 import { AuctionsService } from './auctions/auctions.service';
@@ -25,14 +25,14 @@ import { AuctionsService } from './auctions/auctions.service';
     }),
     UsersModule,
     AuthModule,
-    AdminModule,
+    DataEntryModule,
     AuctionsModule,
   ],
   controllers: [
     AppController,
     UsersController,
     AuthContoller,
-    AdminController,
+    DataEntryController,
     AuctionsController,
   ],
   providers: [
@@ -42,7 +42,7 @@ import { AuctionsService } from './auctions/auctions.service';
     SendgridService,
     UsersService,
     AuthService,
-    AdminService,
+    DataEntryService,
     AuctionsService,
   ],
 })

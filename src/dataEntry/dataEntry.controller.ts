@@ -1,13 +1,13 @@
 import { Body, Controller, Post } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { AdminService } from "./admin.service";
+import { DataEntryService } from "./dataEntry.service";
 import { CreateDataEntryUserDto } from "src/validations/adminValidation/createDataEntryUser.dto";
 
-@ApiTags('Admin')
-@Controller('admin')
-export class AdminController {
+@ApiTags('Data Entry')
+@Controller('data-entry')
+export class DataEntryController {
 
-    constructor(private adminService: AdminService) { }
+    constructor(private adminService: DataEntryService) { }
 
     @Post('create-user')
     createDataEntryUser(@Body() data: CreateDataEntryUserDto) {
