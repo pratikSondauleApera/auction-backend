@@ -75,6 +75,13 @@ export class AuctionsService {
             throw new HttpException('This property is already added', HttpStatus.CONFLICT)
         }
 
+        const startDateTime = new Date(data?.startDate)
+        const endDateTime = new Date(data?.endDate)
+
+        if (startDateTime.getTime() > endDateTime.getTime()) {
+            throw new HttpException('Start date should not be greater than end date', HttpStatus.BAD_REQUEST);
+        }
+
         try {
             const auctionData = {
                 loanAccountNumber: data?.loanAccountNumber,
