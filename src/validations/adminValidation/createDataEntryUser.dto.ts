@@ -2,7 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { Roles } from "@prisma/client";
 import { IsEmail, IsNotEmpty, IsOptional, IsString } from "class-validator";
 
-export class CreateUserDto {
+export class CreateDataEntryUserDto {
     @ApiProperty()
     @IsNotEmpty()
     @IsString()
@@ -36,12 +36,12 @@ export class CreateUserDto {
     @ApiProperty()
     @IsNotEmpty()
     @IsString()
-    stateId: string;
+    cityId: string;
 
     @ApiProperty()
     @IsNotEmpty()
     @IsString()
-    cityId: string;
+    stateId: string;
 
     @ApiProperty()
     @IsNotEmpty()

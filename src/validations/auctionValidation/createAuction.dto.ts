@@ -1,37 +1,11 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Roles } from "@prisma/client";
-import { IsEmail, IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { IsNotEmpty, IsString } from "class-validator";
 
-export class CreateUserDto {
+export class CreateAuctionDto {
     @ApiProperty()
     @IsNotEmpty()
     @IsString()
-    firstName: string;
-
-    @ApiProperty()
-    @IsString()
-    @IsOptional()
-    lastName: string;
-
-    @ApiProperty()
-    @IsNotEmpty()
-    @IsEmail()
-    email: string;
-
-    @ApiProperty()
-    @IsNotEmpty()
-    @IsString()
-    password: string;
-
-    @ApiProperty()
-    @IsNotEmpty()
-    @IsString()
-    phone: string;
-
-    @ApiProperty()
-    @IsNotEmpty()
-    @IsString()
-    address: string;
+    loanAccountNumber: string;
 
     @ApiProperty()
     @IsNotEmpty()
@@ -46,9 +20,44 @@ export class CreateUserDto {
     @ApiProperty()
     @IsNotEmpty()
     @IsString()
-    pincode: string;
+    locationId: string;
 
     @ApiProperty()
     @IsNotEmpty()
-    role: Roles
+    @IsString()
+    startDate: string;
+
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsString()
+    endDate: string;
+
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsString()
+    reservePrice: string;
+
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsString()
+    emd: string;
+
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsString()
+    applicationDeadLine: string;
+
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsString()
+    assetTypeId: string;
+
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsString()
+    institutionBank: string;
+
+    @ApiProperty()
+    attachments: string;
+
 }

@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { PrismaService } from "src/prisma.service";
+import { PrismaService } from "src/services/prisma.service";
 import { LoginDto } from "src/validations/userValidation/loginUser.dto";
 import { Md5 } from "ts-md5";
 
@@ -23,7 +23,7 @@ export class AuthService {
             throw new HttpException('User did not exist', HttpStatus.NOT_FOUND)
         }
 
-        if (user?.role !== 'ADMIN' && user?.verified === false) {
+        if (user?.role !== 'ADMIN' && user?.role !== 'DE' && user?.verified === false) {
             return {
                 status: false,
                 statusCode: HttpStatus.FORBIDDEN,
