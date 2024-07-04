@@ -58,8 +58,6 @@ export class CreateAuctionDto {
     institutionBank: string;
 
     @ApiProperty()
-    @IsNotEmpty()
-    @IsString()
     attachments: string;
 
 }

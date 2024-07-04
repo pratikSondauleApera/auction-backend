@@ -17,9 +17,15 @@ import { DataEntryService } from './dataEntry/dataEntry.service';
 import { AuctionsModule } from './auctions/auctions.module';
 import { AuctionsController } from './auctions/auctions.controller';
 import { AuctionsService } from './auctions/auctions.service';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'),
+      serveRoot: '/uploads/'
+    }),
     ConfigModule.forRoot({
       isGlobal: true
     }),

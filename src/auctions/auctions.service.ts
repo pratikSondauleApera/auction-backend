@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { PrismaService } from "src/services/prisma.service";
 import { CreateAuctionDto } from "src/validations/auctionValidation/createAuction.dto";
+import * as fs from 'fs-extra';
 
 @Injectable()
 export class AuctionsService {
@@ -9,11 +10,13 @@ export class AuctionsService {
         private prisma: PrismaService
     ) { }
 
-    async createAuction(request: any, data: CreateAuctionDto) {
+    async createAuction(request: any, data: CreateAuctionDto, file: Express.Multer.File) {
 
         const { id: loggedInUserId } = request.user;
 
         console.log("UserId ", loggedInUserId)
+
+        const filePath = `./uploads/${file?.filename}`;
 
         const user = await this.prisma.users.findUnique({
             where: {
@@ -22,6 +25,7 @@ export class AuctionsService {
         })
 
         if (!user) {
+            await fs.unlink(filePath)
             throw new HttpException('User not found', HttpStatus.NOT_FOUND)
         }
 
@@ -95,7 +99,7 @@ export class AuctionsService {
                 applicationDeadLine: data?.applicationDeadLine,
                 assetTypeId: getAssetType.id,
                 institutionBank: data?.institutionBank,
-                attachments: data?.attachments,
+                attachments: file?.filename,
                 userId: user?.id
             }
 
